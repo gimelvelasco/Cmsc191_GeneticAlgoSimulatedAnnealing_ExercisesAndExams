@@ -1,0 +1,83 @@
+\documentclass{acm_proc_article-sp}
+
+\begin{document}
+
+\title{Cmsc 191 Exercise 5: Using the Simulated Annealing Algorithm in Solving Roots of Single Variabled Functions.}
+
+\author{
+\alignauthor
+    Gimel David F. Velasco\\
+    \affaddr{Department of Mathematics and Computer Science}\\
+    \affaddr{University of the Philippines Baguio}\\
+    \email{gfvelasco@up.edu.ph}
+}
+
+\date{September 20, 2016}
+
+\maketitle
+
+\abstract{This paper demonstrates a simple implementation of the Simulated Annealing in solving the root for single variabled functions.}
+
+\section{Introduction}
+The Simulated Annealing is another type of Heuristics which is used for solving complex problems. Finding the true global optimal solution is not guaranteed in such methods but it is good at looking for the local optima that is very close if not the global optimal solution. For this tests, the Simulated Annealing Algorithm will solve for the root of single variabled functions.
+
+\section{Methodology}
+The algorithm will seek the roots of the following equations:
+Problem 1:
+\begin{equation}
+f(x) = x - cos(x)
+\end{equation}
+Problem 2:
+\begin{equation}
+f(x) = e^{-x}(x-2)
+\end{equation}
+Problem 3:
+\begin{equation}
+f(x) = x^2 - x - 12
+\end{equation}
+
+in the interval [-5,5]. The absolute value of the functions above is the set objective function of the Simulated Annealing Algorithm. A Minimization Problem is implemented in the algorithm wherein the objective of the algorithm is to get very close if not equal to zero.
+
+The Simulated Annealing Algorithm implemented in this program is based on how the algorithm is explained in the presentation made by Oliver de Weck, Ph.D. [1]. The pseudocode of the Simulated Annealing Algorithm is shown below:\\
+\subsection{The Simulated Annealing Algorithm}
+1. Choose a random Xi, select the initial system temperature, and specify the cooling (i.e. annealing) schedule\\
+2. Evaluate E(Xi) using a simulation model\\
+3. Perturb Xi to obtain a neighboring Design Vector (Xn)\\
+4. Evaluate E(Xn) using a simulation model\\
+5. If $E(Xn)< E(Xi)$, Xn is the new current solution\\
+6. If $E(Xn)> E(Xi)$, then accept Xn as the new current solution with a probability $e^{-D/T}$ where $D = E(Xn) -E(Xi)$\\
+7. Reduce the system temperature according to the cooling schedule\\
+8. Terminate the algorithm
+
+where X is the Design Vector, E is the System Energy (i.e. Objective Function), T is the System Temperature and D is the Difference in System Energy Between Two Design Vectors.
+
+\subsection{Values Set for the Algorithm}
+The values used for the algorithm are as follows:\\
+Cooling Schedule: {100, 50, 40, 30, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.001, 0.0001, 0.00001}\\
+Number of Random Neighbors to consider: 10000
+
+\section{Results and Discussion}
+For all the problems/functions, the Simulated Annealing Algorithm is able to find the roots of the functions with a significant decimal place accuracy with a very small amount of time compared to the Generic Algorithm. The values that the algorithm has found for each problem is the following\\
+Problem 1:
+\begin{equation*}
+x = 0.7390384222183666
+\end{equation*}
+with runtime 0.373268 second.\\
+Problem 2:
+\begin{equation*}
+x = 2.0000398094969074
+\end{equation*}
+with runtime 0.363043 second.\\
+Problem 3:
+\begin{equation*}
+x = -3.0000294764235980; x = 3.9999982239144725
+\end{equation*}
+with runtime 0.354620 second and 0.346946 second respectively.
+
+\section{Conclusion}
+The Simulated Annealing Algorithm is capable of finding the roots of the functions. All the more, the roots that the algorithm finds is capable of being accurate with a significant number of decimal places in a very small time. 
+
+\section{References}
+[1] de Weck O. "Simulated Annealing: A Basic Introduction", Massachusetts Institute of Technology,2010 
+
+\end{document}

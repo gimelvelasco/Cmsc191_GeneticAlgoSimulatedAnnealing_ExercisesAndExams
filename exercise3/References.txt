@@ -1,0 +1,3 @@
+References:
+Weisstein, E.W. "Griewank Function." From MathWorld--A Wolfram Web Resource. Retrieved August 27, 2016, from http://mathworld.wolfram.com/GriewankFunction.html
+Surjanovic, S. & Bingham D. "Sum Of Different Powers Function" Retrieved August 27, 2016, from http://www.sfu.ca/~ssurjano/sumpow.html 

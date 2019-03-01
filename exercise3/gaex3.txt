@@ -1,0 +1,21 @@
+Test Functions:
+
+Griewangk's Function
+i = 2
+i = 3
+
+Sum of Different Power Functions
+
+solve for x1,x2,x3
+element of Real Numbers
+Population: 10,50,500
+Generations: 10,50,500
+display table (x1,x2,x3,fitness)
+arrange population based on fitness
+minimum value f(xi) = 0
+
+//look up the functions in the internet
+
+References:
+Weisstein, E.W. "Griewank Function." From MathWorld--A Wolfram Web Resource. Retrieved August 27, 2016, from http://mathworld.wolfram.com/GriewankFunction.html
+Surjanovic, S. & Bingham D. "Sum Of Different Powers Function" Retrieved August 27, 2016, from http://www.sfu.ca/~ssurjano/sumpow.html 

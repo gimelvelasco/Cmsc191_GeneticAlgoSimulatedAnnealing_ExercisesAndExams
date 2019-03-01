@@ -1,0 +1,311 @@
+\documentclass{article}
+\usepackage{geometry}
+\geometry{
+letterpaper, portrait, margin=1in
+}
+\usepackage{multirow}
+\usepackage{graphicx}
+\graphicspath{{graphs/}}
+
+\begin{document}
+
+\title{Cmsc 191 Long Exam 1 Part 1: Analysis of Convergence of 10 Standard Test Functions Using the Hybrid Simulated Annealing Algorithm}
+
+\author{Gimel David F. Velasco}
+
+\date{October 4, 2016}
+
+\maketitle
+
+\abstract{This paper demonstrates an implementation of the Hybrid Simulated Annealing in solving the global minimum for 10 continuous 2-variabled standard test functions.}
+
+\section{Introduction}
+The Simulated Annealing is a type of Heuristics which is used for solving complex problems. This algorithm is of the analogy that if a liquid material cools slowly, the system will then get into a state of minimum energy optimally. On the onther hand, if the liquid material cools too quickly, it will have a sub-optimal configuration.In this paper, the concept of the Hybrid Simulated Annealing is presented wherein instead of looking at a single $X_i$ as the possible solution for a problem, a whole number of population of $X_i$s are used. Which was adapted in the concept of the Genetic Algorithm. Now, for these standard test functions, the Hybrid Simulated Annealing Algorithm will solve or get close to their respective global minimum.
+
+\section{10 Test Functions}
+The algorithm will seek the global minimum of the following standard test functions [1]:\\
+\textbf{Problem 1}: De Jong's Function ($|x| \leq 5.12; n=5,10$)
+\begin{equation}
+f(x) = \sum^n_{i=1}x_i^2
+\end{equation}
+\centerline{\includegraphics{tf1}}
+Global Minimum: $f(x) = 0$\\\\
+\textbf{Problem 2}: Axis Parallel Hyper-Ellipsoid Function ($|x| \leq 5.12; n=5,10$)
+\begin{equation}
+f(x) = \sum^n_{i=1}(i*x_i^2)
+\end{equation}
+\centerline{\includegraphics{tf2}}
+Global Minimum: $f(x) = 0$\\\\
+\textbf{Problem 3}: Rotated Hyper-Ellipsoid Function ($|x| \leq 65.536; n=5,10$)
+\begin{equation}
+f(x) = \sum^n_{i=1}\sum^i_{j=1}x_j^2
+\end{equation}
+\centerline{\includegraphics{tf3}}
+Global Minimum: $f(x) = 0$\\\\
+\textbf{Problem 4}: Rastrigin's Function ($|x| \leq 5.12; n=5,10$)
+\begin{equation}
+f(x) = 10n + \sum^n_{i=1}[x_i^2 - 10cos(2\pi x_i)]
+\end{equation}
+\centerline{\includegraphics{tf4}}
+Global Minimum: $f(x) = 0$\\\\
+\textbf{Problem 5}: Griewangk's Function ($|x| \leq 600; n=5,10$)
+\begin{equation}
+f(x) = \frac{1}{4000}\sum^n_{i=1}x_i^2 - \prod^n_{i=1}cos(\frac{x_i}{\sqrt{i}}) + 1
+\end{equation}
+\centerline{\includegraphics{tf5}}
+Global Minimum: $f(x) = 0$\\\\
+\textbf{Problem 6}: Ackley's Function ($|x| \leq 32.768; n=5,10$)
+\begin{equation}
+f(x) = -a*exp(-b*\sqrt{\frac{1}{n}\sum^n_{i=1}x_i^2}) - exp(\frac{1}{n}\sum^n_{i=1}cos(cx_i)) + a + exp(1)
+\end{equation}
+\centerline{\includegraphics{tf6}}
+Global Minimum: $f(x) = 0$\\
+where $a=20, b=0.2, c = 2\pi$\\\\
+\textbf{Problem 7}: Branin's Function ($|x| \leq 12.5; n=2$)
+\begin{equation}
+f(x_1,x_2) = a(x_2 - bx^2_1 + cx_1 - d)^2 + e(1 - f)cos(x_1) + e
+\end{equation}
+\centerline{\includegraphics{tf7}}
+Global Minimum: $f(x_1,x_2) = 0.397887$\\
+where $a=1, b=\frac{5.1}{4\pi^2}, c=\frac{5}{\pi}, d=6, e=10, f=\frac{1}{8\pi}$\\\\
+\textbf{Problem 8}: Easom's Function ($|x| \leq 100; n=2$)
+\begin{equation}
+f(x_1,x_2) = -cos(x_1)cos(x_2)exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)
+\end{equation}
+\centerline{\includegraphics{tf8}}
+Global Minimum: $f(x_1,x_2) = -1$\\\\
+\textbf{Problem 9}: Six-Hump Camel Back Function ($|x| \leq 3; n=2$)
+\begin{equation}
+f(x_1,x_2) = (4 - 2.1x^2_1 + \frac{x^4_1}{3})x^2_1 + x_1 x_2 + (-4 + 4x^2_2)x^2_2
+\end{equation}
+\centerline{\includegraphics{tf9}}
+Global Minimum: $f(x_1,x_2) = -1.0316$\\\\
+\textbf{Problem 10}: Shubert's Function ($|x| \leq 5.12; n=2$)
+\begin{equation}
+f(x_1,x_2) = -\sum^5_{i=1}icos((i + 1)x_1 + 1)\sum^5_{i=1}icos((i + 1)x_2 + 1)
+\end{equation}
+\centerline{\includegraphics{tf10}}
+Global Minimum: $f(x) = -186.7309$\\\\
+
+\section{Methodology}
+The fitness function or objective function of which is defined as:
+\begin{equation}
+OBJ(x) = |f(x) - global minimum|
+\end{equation}
+
+A Minimization Problem is implemented in the algorithm wherein the objective of the algorithm is to get very close if not equal to zero.
+
+\subsection{The Hybrid Simulated Annealing Algorithm Pseudocode}
+The Hybrid Simulated Annealing Algorithm implemented in this program is based on how the algorithm is explained in the Test Paper. The pseudocode of the Hybrid Simulated Annealing Algorithm is shown below:\\
+\textit{
+1. Set T to a sufficiently high value\\
+2. Initialize the population randomly\\
+3. Repeatedly generate each new population from current population until T has reached a desireable minimum value:\\
+	3.a. Do N/2 times:\\
+		3.a.i. Select two parents at random from the N population\\
+		3.a.ii. Generate two offspring using recombination operator (crossover), followed by the neighborhood operator (mutation)\\
+		3.a.iii. Hold on one or two Boltzman trials between offspring and parents\\
+		3.a.iv. Overwrite the parents with the trial winners\\
+	3.b. Periodically lower T\\
+4. Take Solution\\
+}
+
+where N is the number of population and T is the System Temperature.\\
+
+\subsection{The Boltzman Trial Algorithm Pseudocode}
+The Boltzman Trial Pseudocode implied in this algorithm is as follows:\\
+\textit{
+1. Pick the Single or Double Acceptance/ Rejection by flipping a coin\\
+2. If the Double Acceptance/Rejection is picked, take $E_i = E_{parent1} + E_{parent2}; E_j = E_{child1} + E_{child2}$\\
+3. If the Single Acceptance/Rejection is picked, take $E_i = E_{parent}; E_j = E_{child}$. Do this so that each parent would be trialed with each child.\\
+4. The logistic probability of $E_i$ to win is $1/(1 + exp(E_i - E_j)/T)$\\
+}
+
+where $E_{chromosome}$ is the cost of solution to a respective chromosome
+
+\subsection{The Recombination Operator Pseudocode}
+The Recombination Operator Pseudocode implied in this algorithm is as follows:\\
+\textit{
+1. If the selected parents are to undergo crossover (based on $p_c$), perform a single point crossover at a random point in their chromosome producing two children. Then proceed to the Neighborhood Operator.
+2. If the parents are not to undergo crossover, the parents will have their tournament. The better parent overwrites the other parent. Do not proceed to the Neighborhood Operator.
+}
+
+\subsection{The Neighborhood Operator Pseudocode}
+The Neighborhood Operator Pseudocode implied in this algorithm is as follows [2]:\\
+\textit{
+1. Each of the generated children will do steps 2 to 4.
+2. Perturb $n$ neighbors of a child where $n = N*p_n$\\
+3. If a neighbor is better than the child, replace the child\\
+4. Else, replace the child with a probability $e^{-D/T}$ where $D = E_{neighbor} - E_{child}$\\
+}
+
+\subsection{General Test Procedure}
+The whole program will test the values of $N, p_c, p_m, ratio_{cooling}$ that best suits each function. For $N = 100 and 1000$; $p_c = 1.0, 0.9 and 0.8$; $p_m = 0.05 and 0.01$; $ratio_{cooling} = 0.7 and 0.9$. Each function will run each pairing of the parameters for 3 trials and then the average energy, $E_{aveg}$, and the average runtime, $runtime_{aveg}$, will be computed for each 3 trials. The program has the initial and final $T$ set to $T_{initial} = 1000$ and $T_{final} < 0.0000000000000001$.
+
+\section{Results and Discussion}
+\subsection{Best Parameters per Function}
+After 3 trials on each $N, p_c, p_m, ratio_{cooling}$, the best results yielded per function are shown below:\\
+
+\textbf{Problem 1}: De Jong's Function (Best)\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 1 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.8 & 0.05 & 0.9 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.0015764710498753$ and $Runtime_{average} = 41.3449611858984620$s\\\\
+
+\textbf{Problem 2}: Axis Parallel Hyper-Ellipsoid Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 2 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.9 & 0.01 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} =0.0009798755988856$ and $Runtime_{average} = 5.9209057866499180$s\\\\
+
+\textbf{Problem 3}: Rotated Hyper-Ellipsoid Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 3 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.8 & 0.01 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.2953668378590396$ and $Runtime_{average} = 5.3379754476486250$s\\\\
+
+\textbf{Problem 4}: Rastrigin's Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 4 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.9 & 0.01 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.1381402257857746$ and $Runtime_{average} = 5.8467638864548475$s\\\\
+
+\textbf{Problem 5}: Griewangk's Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 5 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.8 & 0.05 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.0047081618645275$ and $Runtime_{average} = 27.2035168548162290$s\\\\
+
+\textbf{Problem 6}: Ackley's Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 6 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.9 & 0.05 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.9123456551835348$ and $Runtime_{average} = 54.2163086700349270$s\\\\
+
+\textbf{Problem 7}: Branin's Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 7 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.9 & 0.05 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.0174309157901743$ and $Runtime_{average} = 25.5826198382648900$s\\\\
+
+\textbf{Problem 8}: Easom's Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 8 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 1.0 & 0.05 & 0.9 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.5086092506616432$ and $Runtime_{average} = 48.5967730565665260$s\\\\
+
+\textbf{Problem 9}: Six-Hump Camel Back Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 9 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 0.8 & 0.01 & 0.9 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.0030237695257636$ and $Runtime_{average} = 8.7973803821196856$s\\\\
+
+\textbf{Problem 10}: Shubert's Function\\
+Best Solution found at\\
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Function 9 & $N$ & $p_c$ & $p_m$ & $ratio_{cooling}$ \\
+\hline
+\multirow{1}{3em}{n=5}
+& 1000 & 1.0 & 0.01 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+with $E_{average} = 0.6965685603289558$ and $Runtime_{average} = 6.5674327747791894$s\\\\
+
+\subsection{Observations}
+Based on the observations on all the results stated above, each parameter $N, p_c, p_m, ratio_{cooling}$ is discussed below:
+\subsubsection{Population Size}
+It is easily observed that the runs that had a larger number of population, $N$, yielded the best results. So it can be implied that the bigger the population size, the better are the results that will be yielded. The side effect of that though is that the runtime would significantly be affected as it also has a relationship with the mutation rate $p_m$.
+
+\subsubsection{Crossover Rate}
+From what was observed, a bigger crossover rate, $p_c$, is very effective in searching for the global minimum only on the functions that has their global minimum very steep. Such functions were Rastrigin's Function, Ackley's Function, Easom's Function and Shubert's Function. The Algorithm was able to find the best where the crossover rate is larger.
+
+\subsubsection{Mutation Rate}
+The Mutation Rate, $p_m$, has a very significant effect on the runtime of the algorithm. As observed from the results, the runs that had a larger $p_m$ yielded a very large runtime.
+
+\subsubsection{Cooling Ratio}
+The Cooling Ratio, $ratio_{cooling}$, also gives an effect in the runtime but not as significant as that of the $p_m$.
+
+\section{Conclusion}
+The Hybrid Simulated Annealing Algorithm was able to solve or get near the coordinates of where the global minimum of each function is. With the different observations stated above, the proper parameters to use for the Hybrid Simulated Annealing Algorithm to solve a function is now made known. For a user to be more accurate for solving the solution or global minimum/maximum of a function, the stated parameters above can be used as guidelines.
+
+\section{References}
+[1] Molga, M. and Smutnicki, C., "Test Functions for Optimization Needs", 2005
+\\
+
+[2] de Weck O.,  "Simulated Annealing: A Basic Introduction", Massachusetts Institute of Technology, 2010 
+\end{document}

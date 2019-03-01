@@ -1,0 +1,24 @@
+Cmsc191 LE1 Notes:
+
+Objectives:
+1. The effect of the population size should be demonstrated in the report
+2. Experiment on pc = 1.0, 0.9 and 0.8. Determine if simulation results to having advantage for pc < 1.0
+3. Determine the appropriate pm by taking declining pm in your simulations.
+4. Determine optimal neighbourhood sizes for a PARTICULAR problem.
+5. Determine optimal cooling ratio
+6. Conclusion should be a detailed analysis on the simulation and the effectiveness of some properties of the hybrid SA.
+
+Test Functions:
+1. Same as last exercise. 10 test functions.
+
+Things need to get after the whole run:
+1. Best Cooling Ratio
+2. Best Popsize per problem
+3. Best pm
+4. Best pc
+5. popsize, runtime, fitness table
+
+Other observations to include in latex:
+1. SA's runtime is predictable
+2. Algorithm does not get the near the global minimum for functions that has very steep global minimum. Such as Ackley, Easom and Shubert
+3. Solution is near at Griewangks, its just that the curvature of the function is very shallow therefore will yield a vast approximations near the global minimum.
